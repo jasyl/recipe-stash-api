@@ -21,6 +21,7 @@ public class Recipe {
     private int servings;
     private String img;
     private String sourceUrl;
+    private String ingredients;
     private String instructions;
 
     public Recipe() {
@@ -32,6 +33,7 @@ public class Recipe {
                   int servings,
                   String img,
                   String sourceUrl,
+                  String ingredients,
                   String instructions) {
         this.id = id;
         this.externalId = externalId;
@@ -39,6 +41,7 @@ public class Recipe {
         this.servings = servings;
         this.img = img;
         this.sourceUrl = sourceUrl;
+        this.ingredients = ingredients;
         this.instructions = instructions;
     }
 
@@ -46,12 +49,14 @@ public class Recipe {
                   int servings,
                   String img,
                   String sourceUrl,
+                  String ingredients,
                   String instructions) {
         this.externalId = externalId;
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
         this.sourceUrl = sourceUrl;
+        this.ingredients = ingredients;
         this.instructions = instructions;
     }
 
@@ -59,29 +64,35 @@ public class Recipe {
                   int servings,
                   String img,
                   String sourceUrl,
+                  String ingredients,
                   String instructions) {
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
         this.sourceUrl = sourceUrl;
+        this.ingredients = ingredients;
         this.instructions = instructions;
     }
 
     public Recipe(int readyInMinutes,
                   int servings,
                   String img,
+                  String ingredients,
                   String instructions) {
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
+        this.ingredients = ingredients;
         this.instructions = instructions;
     }
 
     public Recipe(int readyInMinutes,
                   int servings,
+                  String ingredients,
                   String instructions) {
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
+        this.ingredients = ingredients;
         this.instructions = instructions;
     }
 
@@ -131,6 +142,14 @@ public class Recipe {
 
     public void setSourceUrl(String sourceUrl) {
         this.sourceUrl = sourceUrl;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+
     }
 
     public String getInstructions() {
