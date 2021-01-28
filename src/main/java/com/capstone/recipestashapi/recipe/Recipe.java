@@ -2,8 +2,8 @@ package com.capstone.recipestashapi.recipe;
 
 import javax.persistence.*;
 
-@Entity
-@Table
+@Entity // Hibernate
+@Table  // Table in our database
 public class Recipe {
     @Id
     @SequenceGenerator(
@@ -17,6 +17,7 @@ public class Recipe {
     )
     private Long id;
     private Long externalId;
+    private String title;
     private int readyInMinutes;
     private int servings;
     private String img;
@@ -29,6 +30,7 @@ public class Recipe {
 
     public Recipe(Long id,
                   Long externalId,
+                  String title,
                   int readyInMinutes,
                   int servings,
                   String img,
@@ -37,6 +39,7 @@ public class Recipe {
                   String instructions) {
         this.id = id;
         this.externalId = externalId;
+        this.title = title;
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
@@ -45,13 +48,16 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-    public Recipe(Long externalId, int readyInMinutes,
+    public Recipe(Long externalId,
+                  String title,
+                  int readyInMinutes,
                   int servings,
                   String img,
                   String sourceUrl,
                   String ingredients,
                   String instructions) {
         this.externalId = externalId;
+        this.title = title;
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
@@ -60,12 +66,14 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-    public Recipe(int readyInMinutes,
+    public Recipe(String title,
+                  int readyInMinutes,
                   int servings,
                   String img,
                   String sourceUrl,
                   String ingredients,
                   String instructions) {
+        this.title = title;
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
@@ -74,11 +82,13 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-    public Recipe(int readyInMinutes,
+    public Recipe(String title,
+                  int readyInMinutes,
                   int servings,
                   String img,
                   String ingredients,
                   String instructions) {
+        this.title = title;
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
@@ -86,10 +96,21 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-    public Recipe(int readyInMinutes,
+    public Recipe(String title,
+                  int readyInMinutes,
                   int servings,
                   String ingredients,
                   String instructions) {
+        this.title = title;
+        this.readyInMinutes = readyInMinutes;
+        this.servings = servings;
+        this.ingredients = ingredients;
+        this.instructions = instructions;
+    }
+
+    public Recipe(Long id, String title, int readyInMinutes, int servings, String ingredients, String instructions) {
+        this.id = id;
+        this.title = title;
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.ingredients = ingredients;
@@ -111,6 +132,15 @@ public class Recipe {
     public void setExternalId(Long externalId) {
         this.externalId = externalId;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
 
     public int getReadyInMinutes() {
         return readyInMinutes;
