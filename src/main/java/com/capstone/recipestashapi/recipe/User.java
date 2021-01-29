@@ -2,8 +2,12 @@ package com.capstone.recipestashapi.recipe;
 
 import javax.persistence.*;
 
-@Entity(name = "recipe_user")
-@Table
+@Entity(name = "User")
+@Table(name = "recipe_user",
+        uniqueConstraints = {
+            @UniqueConstraint(name = "user_email_unique", columnNames = "email")
+        }
+)
 public class User {
 
     @Id
@@ -19,8 +23,14 @@ public class User {
 
     @Column(name = "id", updatable = false)
     private long id;
+
+    @Column(name = "first_name", nullable = false, columnDefinition = "TEXT")
     private String firstName;
+
+    @Column(name = "last_name", nullable = false, columnDefinition = "TEXT")
     private String lastName;
+
+    @Column(name = "email", nullable = false, columnDefinition = "TEXT", unique = true)
     private long email; // Must be Unique
     private long recipeId;
 
