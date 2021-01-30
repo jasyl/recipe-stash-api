@@ -14,13 +14,13 @@ public class RecipeConfig {
         return args -> {
             User sara = new User("sara", "lee", "slee@ggmail.com");
             userRepository.save(sara);
-            Recipe recipe1 = new Recipe(
+            Recipe cookies = new Recipe(
                     null,
                     30,
                     2,
                     "img",
                     "src url",
-                    "Recipe Example",
+                    "Cookie Recipe",
                     3847384,
                     "Instructions",
                     sara
@@ -28,20 +28,44 @@ public class RecipeConfig {
 
             User jim = new User("jim", "halbert", "jimhalbert@dundermifflin.com");
             userRepository.save(jim);
-            Recipe recipe2 = new Recipe(
+            Recipe cake = new Recipe(
                     null,
                     65,
                     3,
                     "img",
                     "src url",
-                    "Another Recipe Example",
+                    "Cake Recipe",
                     34321,
                     "Instructions",
                     jim
             );
 
+            Recipe ramen = new Recipe(
+                    null,
+                    30,
+                    2,
+                    "img",
+                    "src url",
+                    "Ramen Recipe",
+                    3847384,
+                    "Instructions",
+                    sara
+            );
+
+            Recipe burger = new Recipe(
+                    null,
+                    30,
+                    2,
+                    "img",
+                    "src url",
+                    "Burger Recipe",
+                    3847384,
+                    "Instructions",
+                    sara
+            );
+
             recipeRepository.saveAll(
-                    List.of(recipe1, recipe2)
+                    List.of(cookies, cake, ramen, burger)
             );
 
         };
