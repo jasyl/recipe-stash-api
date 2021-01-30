@@ -10,26 +10,37 @@ import java.util.List;
 public class RecipeConfig {
 
     @Bean
-    CommandLineRunner commandLineRunner(RecipeRepository repository){
+    CommandLineRunner recipeCommandLineRunner(RecipeRepository recipeRepository, UserRepository userRepository){
         return args -> {
+            User sara = new User("sara", "lee", "slee@ggmail.com");
+            userRepository.save(sara);
             Recipe recipe1 = new Recipe(
-                    1L,
-                    "Recipe Example",
+                    null,
                     30,
                     2,
-                    "Ingredients",
-                    "Instructions"
+                    "img",
+                    "src url",
+                    "Recipe Example",
+                    3847384,
+                    "Instructions",
+                    sara
             );
 
+            User jim = new User("jim", "halbert", "jimhalbert@dundermifflin.com");
+            userRepository.save(jim);
             Recipe recipe2 = new Recipe(
-                    "Recipe Example 2",
-                    60,
-                    4,
-                    "Ingredients2",
-                    "Instructions2"
+                    null,
+                    65,
+                    3,
+                    "img",
+                    "src url",
+                    "Another Recipe Example",
+                    34321,
+                    "Instructions",
+                    jim
             );
 
-            repository.saveAll(
+            recipeRepository.saveAll(
                     List.of(recipe1, recipe2)
             );
 
