@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table
-public class Ingredients {
+public class Ingredient {
 
     @Id
     @SequenceGenerator(
@@ -29,14 +29,14 @@ public class Ingredients {
     private String qty;
 
     @JsonIgnore
-    @ManyToOne(targetEntity = Recipe.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipe_id", nullable=false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    public Ingredients() {
+    public Ingredient() {
     }
 
-    public Ingredients(String ingredient, String qty) {
+    public Ingredient(String ingredient, String qty) {
         this.id = id;
         this.ingredient = ingredient;
         this.qty = qty;
@@ -66,11 +66,26 @@ public class Ingredients {
         this.qty = qty;
     }
 
+    @JsonIgnore
     public Recipe getRecipe() {
         return recipe;
     }
 
+    @JsonIgnore
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+        if (!recipe.getIngredients().contains(this)) {
+            recipe.getIngredients().add(this);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "id=" + id +
+                ", ingredient='" + ingredient + '\'' +
+                ", qty='" + qty + '\'' +
+//                ", recipe=" + recipe +
+                '}';
     }
 }
