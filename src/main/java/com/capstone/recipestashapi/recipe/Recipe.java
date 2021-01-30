@@ -3,6 +3,8 @@ package com.capstone.recipestashapi.recipe;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity // Hibernate
 @Table  // Table in our database
@@ -18,37 +20,43 @@ public class Recipe {
             generator = "recipe_sequence"
     )
 
-    @Column(name = "id", updatable = false)
+
     private Long id;
 
-    @Column(name = "external_id", nullable = true)
+    @Column(name = "external_id")
     private Long externalId;
 
-    @Column(name = "ready_in_minutes", nullable = true)
+    @Column(name = "ready_in_minutes")
     private int readyInMinutes;
 
-    @Column(name = "servings", nullable = true)
+    @Column(name = "servings")
     private int servings;
 
-    @Column(name = "image_url", nullable = true)
+    @Column(name = "image_url", columnDefinition = "TEXT")
     private String img;
 
-    @Column(name = "source_url", nullable = true)
+    @Column(name = "source_url", columnDefinition = "TEXT")
     private String sourceUrl;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", columnDefinition = "TEXT")
     private String title;
 
-    @Column(name = "ingredients_id", nullable = false)
-    private long ingredientsId;
-
-    @Column(name = "instructions", nullable = false)
+    @Column(name = "instructions", columnDefinition = "TEXT")
     private String instructions;
 
     @JsonIgnore
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable=false)
     private User user;
+
+    @OneToMany(
+            mappedBy = "recipe",
+            targetEntity = Ingredient.class,
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE},
+            fetch = FetchType.LAZY
+    )
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     public Recipe() {
     }
@@ -59,7 +67,7 @@ public class Recipe {
                   String img,
                   String sourceUrl,
                   String title,
-                  long ingredientsId,
+                  List<Ingredient> ingredients,
                   String instructions) {
         this.externalId = externalId;
         this.readyInMinutes = readyInMinutes;
@@ -67,18 +75,18 @@ public class Recipe {
         this.img = img;
         this.sourceUrl = sourceUrl;
         this.title = title;
-        this.ingredientsId = ingredientsId;
+        this.ingredients = ingredients;
         this.instructions = instructions;
     }
 
-    public Recipe(Long externalId, int readyInMinutes, int servings, String img, String sourceUrl, String title, long ingredientsId, String instructions, User user) {
+    public Recipe(Long externalId, int readyInMinutes, int servings, String img, String sourceUrl, String title, List<Ingredient> ingredients, String instructions, User user) {
         this.externalId = externalId;
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
         this.sourceUrl = sourceUrl;
         this.title = title;
-        this.ingredientsId = ingredientsId;
+        this.ingredients = ingredients;
         this.instructions = instructions;
         this.user = user;
     }
@@ -139,12 +147,12 @@ public class Recipe {
         this.sourceUrl = sourceUrl;
     }
 
-    public long getIngredientsId() {
-        return ingredientsId;
+    public List<Ingredient> getIngredients() {
+        return ingredients;
     }
 
-    public void setIngredientsId(long ingredientsId) {
-        this.ingredientsId = ingredientsId;
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     public String getInstructions() {
@@ -153,6 +161,11 @@ public class Recipe {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    public void addIngredientItem(Ingredient item) {
+        item.setRecipe(this);
+        ingredients.add(item);
     }
 
     public User getUser() {
@@ -176,9 +189,9 @@ public class Recipe {
                 ", img='" + img + '\'' +
                 ", sourceUrl='" + sourceUrl + '\'' +
                 ", title='" + title + '\'' +
-                ", ingredientsId=" + ingredientsId +
                 ", instructions='" + instructions + '\'' +
                 ", user=" + user +
+                ", ingredients=" + ingredients +
                 '}';
     }
 }
