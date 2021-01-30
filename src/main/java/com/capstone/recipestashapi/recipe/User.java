@@ -1,9 +1,12 @@
 package com.capstone.recipestashapi.recipe;
 
 import javax.persistence.*;
+import java.awt.print.Book;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "User")
-@Table(name = "recipe_user",
+@Table(name = "app_user",
         uniqueConstraints = {
             @UniqueConstraint(name = "user_email_unique", columnNames = "email")
         }
@@ -31,21 +34,24 @@ public class User {
     private String lastName;
 
     @Column(name = "email", nullable = false, columnDefinition = "TEXT", unique = true)
-    private long email; // Must be Unique
-    private long recipeId;
+    private String email; // Must be Unique
 
-
-    // a user can have multiple recipes
+    @OneToMany(
+            mappedBy = "user",
+            targetEntity=Recipe.class,
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            fetch = FetchType.LAZY
+    )
+    private List<Recipe> recipes = new ArrayList<>();
 
     public User() {
     }
 
-    public User(long id, String firstName, String lastName, long email, long recipeId) {
-        this.id = id;
+    public User( String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.recipeId = recipeId;
     }
 
     public long getId() {
@@ -56,19 +62,11 @@ public class User {
         this.id = id;
     }
 
-    public long getRecipeId() {
-        return recipeId;
-    }
-
-    public void setRecipeId(long recipeId) {
-        this.recipeId = recipeId;
-    }
-
-    public long getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(long email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -86,5 +84,28 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
+    }
+
+
+    public void addRecipe(Recipe recipe) {
+        if (!this.recipes.contains(recipe)) {
+            this.recipes.add(recipe);
+            recipe.setUser(this);
+        }
+    }
+
+    public void removeRecipe(Recipe recipe) {
+        if (this.recipes.contains(recipe)) {
+            this.recipes.remove(recipe);
+            recipe.setUser(null);
+        }
     }
 }

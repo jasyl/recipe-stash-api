@@ -1,5 +1,7 @@
 package com.capstone.recipestashapi.recipe;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity // Hibernate
@@ -17,104 +19,50 @@ public class Recipe {
     )
     private Long id;
     private Long externalId;
-    private String title;
     private int readyInMinutes;
     private int servings;
     private String img;
     private String sourceUrl;
-    private String ingredients;
+    private String title;
+    private long ingredientsId;
     private String instructions;
+
+    @JsonIgnore
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable=false)
+    private User user;
 
     public Recipe() {
     }
 
-    public Recipe(Long id,
-                  Long externalId,
-                  String title,
-                  int readyInMinutes,
-                  int servings,
-                  String img,
-                  String sourceUrl,
-                  String ingredients,
-                  String instructions) {
-        this.id = id;
-        this.externalId = externalId;
-        this.title = title;
-        this.readyInMinutes = readyInMinutes;
-        this.servings = servings;
-        this.img = img;
-        this.sourceUrl = sourceUrl;
-        this.ingredients = ingredients;
-        this.instructions = instructions;
-    }
-
     public Recipe(Long externalId,
-                  String title,
                   int readyInMinutes,
                   int servings,
                   String img,
                   String sourceUrl,
-                  String ingredients,
+                  String title,
+                  long ingredientsId,
                   String instructions) {
         this.externalId = externalId;
-        this.title = title;
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
         this.sourceUrl = sourceUrl;
-        this.ingredients = ingredients;
+        this.title = title;
+        this.ingredientsId = ingredientsId;
         this.instructions = instructions;
     }
 
-    public Recipe(String title,
-                  int readyInMinutes,
-                  int servings,
-                  String img,
-                  String sourceUrl,
-                  String ingredients,
-                  String instructions) {
-        this.title = title;
+    public Recipe(Long externalId, int readyInMinutes, int servings, String img, String sourceUrl, String title, long ingredientsId, String instructions, User user) {
+        this.externalId = externalId;
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
         this.sourceUrl = sourceUrl;
-        this.ingredients = ingredients;
-        this.instructions = instructions;
-    }
-
-    public Recipe(String title,
-                  int readyInMinutes,
-                  int servings,
-                  String img,
-                  String ingredients,
-                  String instructions) {
         this.title = title;
-        this.readyInMinutes = readyInMinutes;
-        this.servings = servings;
-        this.img = img;
-        this.ingredients = ingredients;
+        this.ingredientsId = ingredientsId;
         this.instructions = instructions;
-    }
-
-    public Recipe(String title,
-                  int readyInMinutes,
-                  int servings,
-                  String ingredients,
-                  String instructions) {
-        this.title = title;
-        this.readyInMinutes = readyInMinutes;
-        this.servings = servings;
-        this.ingredients = ingredients;
-        this.instructions = instructions;
-    }
-
-    public Recipe(Long id, String title, int readyInMinutes, int servings, String ingredients, String instructions) {
-        this.id = id;
-        this.title = title;
-        this.readyInMinutes = readyInMinutes;
-        this.servings = servings;
-        this.ingredients = ingredients;
-        this.instructions = instructions;
+        this.user = user;
     }
 
     public Long getId() {
@@ -140,7 +88,6 @@ public class Recipe {
     public void setTitle(String title) {
         this.title = title;
     }
-
 
     public int getReadyInMinutes() {
         return readyInMinutes;
@@ -174,12 +121,12 @@ public class Recipe {
         this.sourceUrl = sourceUrl;
     }
 
-    public String getIngredients() {
-        return ingredients;
+    public long getIngredientsId() {
+        return ingredientsId;
     }
 
-    public void setIngredients(String ingredients) {
-
+    public void setIngredientsId(long ingredientsId) {
+        this.ingredientsId = ingredientsId;
     }
 
     public String getInstructions() {
@@ -190,16 +137,17 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-    @Override
-    public String toString() {
-        return "Recipe{" +
-                "id=" + id +
-                ", externalId=" + externalId +
-                ", readyInMinutes=" + readyInMinutes +
-                ", servings=" + servings +
-                ", img='" + img + '\'' +
-                ", sourceUrl='" + sourceUrl + '\'' +
-                ", instructions='" + instructions + '\'' +
-                '}';
+    public User getUser() {
+        return user;
     }
+
+    public void setUser(User user) {
+        this.user = user;
+        if (!user.getRecipes().contains(this)) {
+            user.getRecipes().add(this);
+        }
+    }
+
+
+
 }
