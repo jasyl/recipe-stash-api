@@ -22,7 +22,21 @@ public class RecipeService {
         return user.getRecipes();
     }
 
-    public void addRecipe(Recipe recipe) {
+    public Recipe getRecipe(long userId, long recipeId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("user with id " + userId + " does not exist"));
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(() -> new IllegalStateException("recipe with id " + recipeId + " does not exist"));
+        if (!user.getRecipes().contains(recipe)) {
+            throw new IllegalStateException("user does not have that recipe" + recipe);
+        }
+        return recipe;
+    }
+
+    public void addRecipe(long userId, Recipe recipe) {
+
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("user with id " + userId + " does not exist"));
+        user.addRecipe(recipe);
         recipeRepository.save(recipe);
+
     }
 }

@@ -26,14 +26,13 @@ public class RecipeController {
     }
 
     @GetMapping(path = "/recipes/{recipeId}", produces = "application/json")
-    public List<Recipe> getRecipes(@PathVariable long userId, @PathVariable long recipeId) {
-
-        return recipeService.getRecipes(userId);
+    public Recipe getRecipe(@PathVariable long userId, @PathVariable long recipeId) {
+        return recipeService.getRecipe(userId, recipeId);
     }
 
     @PostMapping(path = "/recipes", consumes = "application/json", produces = "application/json")
     public void addRecipe(@PathVariable long userId, @RequestBody Recipe recipe) {
-        recipeService.addRecipe(recipe);
+        recipeService.addRecipe(userId, recipe);
     }
 
     @Value("${api.key}")
