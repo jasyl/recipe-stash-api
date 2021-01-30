@@ -17,14 +17,32 @@ public class Recipe {
             strategy = GenerationType.SEQUENCE,
             generator = "recipe_sequence"
     )
+
+    @Column(name = "id", updatable = false)
     private Long id;
+
+    @Column(name = "external_id", nullable = true)
     private Long externalId;
+
+    @Column(name = "ready_in_minutes", nullable = true)
     private int readyInMinutes;
+
+    @Column(name = "servings", nullable = true)
     private int servings;
+
+    @Column(name = "image_url", nullable = true)
     private String img;
+
+    @Column(name = "source_url", nullable = true)
     private String sourceUrl;
+
+    @Column(name = "title", nullable = false)
     private String title;
+
+    @Column(name = "ingredients_id", nullable = false)
     private long ingredientsId;
+
+    @Column(name = "instructions", nullable = false)
     private String instructions;
 
     @JsonIgnore
@@ -148,6 +166,19 @@ public class Recipe {
         }
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", externalId=" + externalId +
+                ", readyInMinutes=" + readyInMinutes +
+                ", servings=" + servings +
+                ", img='" + img + '\'' +
+                ", sourceUrl='" + sourceUrl + '\'' +
+                ", title='" + title + '\'' +
+                ", ingredientsId=" + ingredientsId +
+                ", instructions='" + instructions + '\'' +
+                ", user=" + user +
+                '}';
+    }
 }
