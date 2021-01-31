@@ -1,9 +1,9 @@
 package com.capstone.recipestashapi.recipe;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -12,12 +12,10 @@ import java.util.List;
 public class RecipeController {
 
     private final RecipeService recipeService;
-    private final RestTemplate restTemplate;
 
     @Autowired
-    public RecipeController(RecipeService recipeService, RestTemplate restTemplate) {
+    public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
-        this.restTemplate = restTemplate;
     }
 
     @GetMapping(path = "/recipes", produces = "application/json")
@@ -30,6 +28,11 @@ public class RecipeController {
         return recipeService.getRecipe(userId, recipeId);
     }
 
+    @PostMapping(path = "/recipes")
+    public ExternalRecipe getRecipesExternal(@PathVariable long userId, @RequestParam String url) throws JsonProcessingException {
+        return recipeService.addExternalRecipe(userId, url);
+    }
+
     @PostMapping(path = "/recipes", consumes = "application/json", produces = "application/json")
     public Recipe addRecipe(@PathVariable long userId, @RequestBody Recipe recipe) {
         return recipeService.createRecipe(userId, recipe);
@@ -40,16 +43,12 @@ public class RecipeController {
         recipeService.updateRecipe(userId, recipeId, newRecipe);
     }
 
-    @Value("${api.key}")
-    private String apiKey;
-
-    @RequestMapping(path = "/{query}")
-    public void getRecipesExternal(@PathVariable long userId, @PathVariable String query) {
-
-        final String uri = "https://api.spoonacular.com/recipes/complexSearch" + "?apiKey=" + apiKey + "&query=" + query ;
-        String result = restTemplate.getForObject(uri, String.class);
-
-        System.out.println(result);
-
+    @DeleteMapping(path = "/recipes/{recipeId}")
+    public void deleteRecipe(@PathVariable long recipeId) {
+        recipeService.deleteRecipe(recipeId);
     }
+
+
+
+
 }
