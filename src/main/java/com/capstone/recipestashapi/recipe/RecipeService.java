@@ -1,14 +1,15 @@
 package com.capstone.recipestashapi.recipe;
 
-import org.springframework.beans.BeanUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class RecipeService {
@@ -16,12 +17,14 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final IngredientsRepository ingredientsRepository;
+    private final RestTemplate restTemplate;
 
     @Autowired
-    public RecipeService(RecipeRepository recipeRepository, UserRepository userRepository, IngredientsRepository ingredientsRepository1) {
+    public RecipeService(RecipeRepository recipeRepository, UserRepository userRepository, IngredientsRepository ingredientsRepository1, RestTemplate restTemplate) {
         this.recipeRepository = recipeRepository;
         this.userRepository = userRepository;
         this.ingredientsRepository = ingredientsRepository1;
+        this.restTemplate = restTemplate;
     }
 
     public List<Recipe> getRecipes(long userId) {
@@ -114,8 +117,31 @@ public class RecipeService {
 
             recipe.setIngredients(ingredients);
         }
+    }
 
+    public void deleteRecipe(long recipeId) {
 
+        boolean exists = recipeRepository.existsById(recipeId);
 
+        if (!exists) {
+            throw new IllegalStateException("recipe with id " + recipeId + " does not exist");
+        }
+
+        recipeRepository.deleteById(recipeId);
+    }
+
+    @Value("${api.key}")
+    private String apiKey;
+
+    public ExternalRecipe addExternalRecipe(long userId, String url) throws JsonProcessingException {
+
+        final String uri = "https://api.spoonacular.com/recipes/extract" + "?apiKey=" + apiKey + "&url=" + url;
+        String result = restTemplate.getForObject(uri, String.class);
+        ObjectMapper mapper = new ObjectMapper();
+//        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        ExternalRecipe externalRecipe = mapper.readValue(result , ExternalRecipe.class);
+
+        return externalRecipe;
     }
 }
