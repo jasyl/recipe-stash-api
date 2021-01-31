@@ -31,8 +31,13 @@ public class RecipeController {
     }
 
     @PostMapping(path = "/recipes", consumes = "application/json", produces = "application/json")
-    public void addRecipe(@PathVariable long userId, @RequestBody Recipe recipe) {
-        recipeService.createRecipe(userId, recipe);
+    public Recipe addRecipe(@PathVariable long userId, @RequestBody Recipe recipe) {
+        return recipeService.createRecipe(userId, recipe);
+    }
+
+    @PutMapping(path = "/recipes/{recipeId}")
+    public void updateRecipe(@PathVariable long userId, @PathVariable long recipeId, @RequestBody Recipe newRecipe) {
+        recipeService.updateRecipe(userId, recipeId, newRecipe);
     }
 
     @Value("${api.key}")
