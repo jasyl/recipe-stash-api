@@ -37,7 +37,6 @@ public class Ingredient {
     }
 
     public Ingredient(String ingredient, String qty) {
-        this.id = id;
         this.ingredient = ingredient;
         this.qty = qty;
     }
