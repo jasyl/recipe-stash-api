@@ -1,72 +1,44 @@
 package com.capstone.recipestashapi.recipe;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.File;
 import java.util.List;
 
 @Configuration
 public class RecipeConfig {
 
+    private final RecipeService recipeService;
+
+    @Autowired
+    public RecipeConfig(RecipeService recipeService) {
+        this.recipeService = recipeService;
+    }
+
     @Bean
-    CommandLineRunner recipeCommandLineRunner(RecipeRepository recipeRepository, UserRepository userRepository){
+    CommandLineRunner recipeCommandLineRunner(RecipeRepository recipeRepository, UserRepository userRepository, IngredientsRepository ingredientsRepository){
         return args -> {
+
+            User jim = new User("jim", "halpert", "jimhalbert@dundermifflin.com");
+            userRepository.save(jim);
+
             User sara = new User("sara", "lee", "slee@ggmail.com");
             userRepository.save(sara);
-            Recipe cookies = new Recipe(
-                    null,
-                    30,
-                    2,
-                    "img",
-                    "src url",
-                    "Cookie Recipe",
-                    3847384,
-                    "Instructions",
-                    sara
-            );
 
-            User jim = new User("jim", "halbert", "jimhalbert@dundermifflin.com");
-            userRepository.save(jim);
-            Recipe cake = new Recipe(
-                    null,
-                    65,
-                    3,
-                    "img",
-                    "src url",
-                    "Cake Recipe",
-                    34321,
-                    "Instructions",
-                    jim
-            );
+            ClassLoader classLoader = getClass().getClassLoader();
+            File file = new File(classLoader.getResource("static/data/recipes.json").getFile());
+//
+            ObjectMapper objectMapper = new ObjectMapper();
 
-            Recipe ramen = new Recipe(
-                    null,
-                    30,
-                    2,
-                    "img",
-                    "src url",
-                    "Ramen Recipe",
-                    3847384,
-                    "Instructions",
-                    sara
-            );
-
-            Recipe burger = new Recipe(
-                    null,
-                    30,
-                    2,
-                    "img",
-                    "src url",
-                    "Burger Recipe",
-                    3847384,
-                    "Instructions",
-                    sara
-            );
-
-            recipeRepository.saveAll(
-                    List.of(cookies, cake, ramen, burger)
-            );
+            List<Recipe> recipes = objectMapper.readValue(file, new TypeReference<List<Recipe>>(){});
+            for (Recipe recipe : recipes) {
+                recipeService.createRecipe(sara.getId(), recipe);
+            }
 
         };
     }
