@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity // Hibernate
-@Table  // Table in our database
+//@Table  // Table in our database
+@Table(name = "recipe", uniqueConstraints = {
+        @UniqueConstraint( name = "idx_userId_srcUrl",  columnNames ={"user_id","source_url"})
+})
 public class Recipe {
     @Id
     @SequenceGenerator(
@@ -22,9 +25,6 @@ public class Recipe {
 
 
     private Long id;
-
-    @Column(name = "external_id")
-    private Long externalId;
 
     @Column(name = "ready_in_minutes")
     private int readyInMinutes;
@@ -61,7 +61,7 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(Long externalId,
+    public Recipe(
                   int readyInMinutes,
                   int servings,
                   String img,
@@ -69,7 +69,7 @@ public class Recipe {
                   String title,
                   List<Ingredient> ingredients,
                   String instructions) {
-        this.externalId = externalId;
+
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
@@ -79,8 +79,7 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-    public Recipe(Long externalId, int readyInMinutes, int servings, String img, String sourceUrl, String title, List<Ingredient> ingredients, String instructions, User user) {
-        this.externalId = externalId;
+    public Recipe( int readyInMinutes, int servings, String img, String sourceUrl, String title, List<Ingredient> ingredients, String instructions, User user) {
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
@@ -97,14 +96,6 @@ public class Recipe {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getExternalId() {
-        return externalId;
-    }
-
-    public void setExternalId(Long externalId) {
-        this.externalId = externalId;
     }
 
     public String getTitle() {
@@ -152,7 +143,8 @@ public class Recipe {
     }
 
     public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+        this.ingredients.clear();
+        this.ingredients.addAll(ingredients);
     }
 
     public String getInstructions() {
@@ -183,7 +175,6 @@ public class Recipe {
     public String toString() {
         return "Recipe{" +
                 "id=" + id +
-                ", externalId=" + externalId +
                 ", readyInMinutes=" + readyInMinutes +
                 ", servings=" + servings +
                 ", img='" + img + '\'' +
