@@ -22,10 +22,10 @@ public class DatabaseLoader implements CommandLineRunner {
     }
 
     public void run(String... strings) throws Exception {
-        User jim = new User("jim", "halpert", "jimhalbert@dundermifflin.com");
+        User jim = new User("jim halbert",  "jimhalbert@dundermifflin.com");
         userRepository.save(jim);
 
-        User sara = new User("sara", "lee", "slee@ggmail.com");
+        User sara = new User("sara lee", "slee@ggmail.com");
         userRepository.save(sara);
 
         ClassLoader classLoader = getClass().getClassLoader();

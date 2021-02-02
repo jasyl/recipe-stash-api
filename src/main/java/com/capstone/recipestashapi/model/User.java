@@ -34,11 +34,13 @@ public class User {
     @Column(name = "id", updatable = false)
     private long id;
 
-    @Column(name = "first_name", nullable = false, columnDefinition = "TEXT")
-    private String firstName;
 
-    @Column(name = "last_name", nullable = false, columnDefinition = "TEXT")
-    private String lastName;
+//
+//    @Column(name = "first_name", nullable = false, columnDefinition = "TEXT")
+//    private String firstName;
+
+    @Column(name = "name", nullable = false, columnDefinition = "TEXT")
+    private String name;
 
     @Email
     @Column(name = "email", nullable = false, columnDefinition = "TEXT", unique = true)
@@ -71,21 +73,18 @@ public class User {
     public User() {
     }
 
-    public User( String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User( String name, String email) {
+        this.name = name;
         this.email = email;
     }
 
-//    public User(String lastName, @Email String email, String imageUrl, Boolean emailVerified, String password, @NotNull AuthProvider provider, String providerId) {
-//        this.lastName = lastName;
-//        this.email = email;
-//        this.imageUrl = imageUrl;
-//        this.emailVerified = emailVerified;
-//        this.password = password;
-//        this.provider = provider;
-//        this.providerId = providerId;
-//    }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public long getId() {
         return id;
@@ -101,22 +100,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public List<Recipe> getRecipes() {
