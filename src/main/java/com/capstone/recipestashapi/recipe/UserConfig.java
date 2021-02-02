@@ -1,5 +1,7 @@
 package com.capstone.recipestashapi.recipe;
 
+import com.capstone.recipestashapi.model.User;
+import com.capstone.recipestashapi.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

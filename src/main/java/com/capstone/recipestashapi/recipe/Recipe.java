@@ -1,5 +1,6 @@
 package com.capstone.recipestashapi.recipe;
 
+import com.capstone.recipestashapi.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;

@@ -1,9 +1,18 @@
-package com.capstone.recipestashapi.recipe;
+package com.capstone.recipestashapi.model;
+
+import com.capstone.recipestashapi.recipe.Recipe;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+//import com.sun.istack.NotNull;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+//@Validated
 @Entity(name = "User")
 @Table(name = "app_user",
         uniqueConstraints = {
@@ -22,7 +31,6 @@ public class User {
             strategy = GenerationType.SEQUENCE,
             generator = "user_sequence"
     )
-
     @Column(name = "id", updatable = false)
     private long id;
 
@@ -32,12 +40,28 @@ public class User {
     @Column(name = "last_name", nullable = false, columnDefinition = "TEXT")
     private String lastName;
 
+    @Email
     @Column(name = "email", nullable = false, columnDefinition = "TEXT", unique = true)
     private String email; // Must be Unique
 
+    private String imageUrl;
+
+    @Column(nullable = false)
+    private Boolean emailVerified = false;
+
+    @JsonIgnore
+    private String password;
+//
+    @NotNull
+    @Column(name = "auth_provider")
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider = AuthProvider.local; // todo need to remove equal later
+
+    private String providerId;
+
     @OneToMany(
             mappedBy = "user",
-            targetEntity=Recipe.class,
+            targetEntity= Recipe.class,
             orphanRemoval = true,
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             fetch = FetchType.LAZY
@@ -52,6 +76,16 @@ public class User {
         this.lastName = lastName;
         this.email = email;
     }
+
+//    public User(String lastName, @Email String email, String imageUrl, Boolean emailVerified, String password, @NotNull AuthProvider provider, String providerId) {
+//        this.lastName = lastName;
+//        this.email = email;
+//        this.imageUrl = imageUrl;
+//        this.emailVerified = emailVerified;
+//        this.password = password;
+//        this.provider = provider;
+//        this.providerId = providerId;
+//    }
 
     public long getId() {
         return id;
@@ -106,5 +140,45 @@ public class User {
             this.recipes.remove(recipe);
             recipe.setUser(null);
         }
+    }
+
+    public Boolean getEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public AuthProvider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(AuthProvider provider) {
+        this.provider = provider;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -1,5 +1,7 @@
 package com.capstone.recipestashapi.recipe;
 
+import com.capstone.recipestashapi.model.User;
+import com.capstone.recipestashapi.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
