@@ -25,8 +25,11 @@ public class Ingredient {
     @Column(name = "ingredient", columnDefinition = "TEXT")
     private String ingredient;
 
-    @Column(name = "quantity", columnDefinition = "TEXT")
-    private String qty;
+    @Column(name = "quantity")
+    private double qty;
+
+    @Column(name = "unit", columnDefinition = "TEXT")
+    private String unit;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,9 +39,15 @@ public class Ingredient {
     public Ingredient() {
     }
 
-    public Ingredient(String ingredient, String qty) {
+    public Ingredient(String ingredient, double qty) {
         this.ingredient = ingredient;
         this.qty = qty;
+    }
+
+    public Ingredient(String ingredient, double qty, String unit) {
+        this.ingredient = ingredient;
+        this.qty = qty;
+        this.unit = unit;
     }
 
     public long getId() {
@@ -53,16 +62,24 @@ public class Ingredient {
         return ingredient;
     }
 
-    private void setIngredient(String ingredient) {
+    public void setIngredient(String ingredient) {
         this.ingredient = ingredient;
     }
 
-    public String getQty() {
+    public double getQty() {
         return qty;
     }
 
-    public void setQty(String qty) {
+    public void setQty(double qty) {
         this.qty = qty;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     @JsonIgnore
