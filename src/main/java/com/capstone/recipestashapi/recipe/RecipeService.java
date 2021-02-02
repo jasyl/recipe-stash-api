@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -133,7 +134,7 @@ public class RecipeService {
     @Value("${api.key}")
     private String apiKey;
 
-    public ExternalRecipe addExternalRecipe(long userId, String url) throws JsonProcessingException {
+    public Recipe addExternalRecipe(long userId, String url) throws JsonProcessingException {
 
         final String uri = "https://api.spoonacular.com/recipes/extract" + "?apiKey=" + apiKey + "&url=" + url;
         String result = restTemplate.getForObject(uri, String.class);
@@ -141,7 +142,36 @@ public class RecipeService {
 //        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         ExternalRecipe externalRecipe = mapper.readValue(result , ExternalRecipe.class);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("user with id " + userId + " does not exist"));
 
-        return externalRecipe;
+
+        Recipe recipe = new Recipe();
+        recipe.setReadyInMinutes(externalRecipe.getReadyInMinutes());
+        recipe.setServings(externalRecipe.getServings());
+        recipe.setImg(externalRecipe.getImage());
+        recipe.setSourceUrl(externalRecipe.getSourceUrl());
+        recipe.setTitle(externalRecipe.getTitle());
+        recipe.setInstructions(externalRecipe.getInstructions());
+
+        List<ExtendedIngredient> extendedIngredients = externalRecipe.getExtendedIngredients();
+        List<Ingredient> ingredients = new ArrayList<>();
+
+        for (ExtendedIngredient eItem : extendedIngredients) {
+            Ingredient newItem = new Ingredient();
+            newItem.setIngredient(eItem.getName());
+            newItem.setQty(eItem.getAmount());
+            newItem.setUnit(eItem.getUnit());
+            newItem.setRecipe(recipe);
+            ingredients.add(newItem);
+        }
+
+        recipe.setIngredients(ingredients);
+        recipe.setUser(user);
+
+        Recipe recipeSaved = recipeRepository.save(recipe);
+        user.addRecipe(recipeSaved);
+
+        return recipeSaved;
     }
 }
