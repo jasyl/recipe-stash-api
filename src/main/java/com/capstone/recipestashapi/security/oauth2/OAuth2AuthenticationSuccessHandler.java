@@ -5,6 +5,7 @@ import com.capstone.recipestashapi.exception.BadRequestException;
 import com.capstone.recipestashapi.security.TokenProvider;
 import com.capstone.recipestashapi.util.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 import static com.capstone.recipestashapi.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
-
+@EnableConfigurationProperties(AppProperties.class)
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
