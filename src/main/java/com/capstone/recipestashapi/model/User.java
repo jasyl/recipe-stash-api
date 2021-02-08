@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //@Validated
-@Entity(name = "User")
+@Entity
 @Table(name = "app_user",
         uniqueConstraints = {
             @UniqueConstraint(name = "user_email_unique", columnNames = "email")

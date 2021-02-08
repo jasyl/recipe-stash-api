@@ -23,8 +23,6 @@ public class Recipe {
             strategy = GenerationType.SEQUENCE,
             generator = "recipe_sequence"
     )
-
-
     private Long id;
 
     @Column(name = "ready_in_minutes")

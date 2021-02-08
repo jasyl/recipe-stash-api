@@ -19,14 +19,14 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
-    private final IngredientsRepository ingredientsRepository;
+    private final IngredientRepository ingredientRepository;
     private final RestTemplate restTemplate;
 
     @Autowired
-    public RecipeService(RecipeRepository recipeRepository, UserRepository userRepository, IngredientsRepository ingredientsRepository1, RestTemplate restTemplate) {
+    public RecipeService(RecipeRepository recipeRepository, UserRepository userRepository, IngredientRepository ingredientRepository1, RestTemplate restTemplate) {
         this.recipeRepository = recipeRepository;
         this.userRepository = userRepository;
-        this.ingredientsRepository = ingredientsRepository1;
+        this.ingredientRepository = ingredientRepository1;
         this.restTemplate = restTemplate;
     }
 
