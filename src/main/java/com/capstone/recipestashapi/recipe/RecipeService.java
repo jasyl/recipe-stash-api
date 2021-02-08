@@ -1,5 +1,7 @@
 package com.capstone.recipestashapi.recipe;
 
+import com.capstone.recipestashapi.model.User;
+import com.capstone.recipestashapi.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +19,14 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
-    private final IngredientsRepository ingredientsRepository;
+    private final IngredientRepository ingredientRepository;
     private final RestTemplate restTemplate;
 
     @Autowired
-    public RecipeService(RecipeRepository recipeRepository, UserRepository userRepository, IngredientsRepository ingredientsRepository1, RestTemplate restTemplate) {
+    public RecipeService(RecipeRepository recipeRepository, UserRepository userRepository, IngredientRepository ingredientRepository1, RestTemplate restTemplate) {
         this.recipeRepository = recipeRepository;
         this.userRepository = userRepository;
-        this.ingredientsRepository = ingredientsRepository1;
+        this.ingredientRepository = ingredientRepository1;
         this.restTemplate = restTemplate;
     }
 

@@ -1,5 +1,6 @@
 package com.capstone.recipestashapi.recipe;
 
+import com.capstone.recipestashapi.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -22,8 +23,6 @@ public class Recipe {
             strategy = GenerationType.SEQUENCE,
             generator = "recipe_sequence"
     )
-
-
     private Long id;
 
     @Column(name = "ready_in_minutes")

@@ -6,14 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExtendedIngredient {
-    @JsonProperty("name")
+    @JsonProperty("originalName")
     private String name;
     @JsonProperty("amount")
     private double amount;
     @JsonProperty("unit")
     private String unit;
-    @JsonProperty("meta")
-    private List<String> meta;
+//    @JsonProperty("meta")
+//    private List<String> meta;
 
     public ExtendedIngredient() {
     }
@@ -48,13 +48,13 @@ public class ExtendedIngredient {
         this.unit = unit;
     }
 
-    public List<String> getMeta() {
-        return meta;
-    }
-
-    public void setMeta(List<String> meta) {
-        this.meta = meta;
-    }
+//    public List<String> getMeta() {
+//        return meta;
+//    }
+//
+//    public void setMeta(List<String> meta) {
+//        this.meta = meta;
+//    }
 
     @Override
     public String toString() {
