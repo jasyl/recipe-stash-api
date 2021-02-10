@@ -53,7 +53,7 @@ public class RecipeService {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("user with id " + userId + " does not exist"));
         recipe.setUser(user);
-        if (recipe.getImg() == null) {
+        if (recipe.getImg() == null || recipe.getImg() == "") {
             recipe.setImg("https://i.stack.imgur.com/y9DpT.jpg");
         }
         Recipe recipeSaved = recipeRepository.save(recipe);
