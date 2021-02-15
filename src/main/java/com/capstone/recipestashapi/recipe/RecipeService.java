@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class RecipeService {
@@ -140,6 +141,11 @@ public class RecipeService {
     private String apiKey;
 
     public Recipe addExternalRecipe(long userId, String url) throws JsonProcessingException {
+        Optional<Recipe> optionalRecipe = recipeRepository.findRecipeBySourceUrl(url);
+        
+        if (optionalRecipe.isPresent()) {
+            throw new IllegalStateException("Can't add recipe because it already exists");
+        }
 
         final String uri = "https://api.spoonacular.com/recipes/extract" + "?apiKey=" + apiKey + "&url=" + url;
         String result = restTemplate.getForObject(uri, String.class);
