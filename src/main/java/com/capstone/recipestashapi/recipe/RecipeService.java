@@ -191,7 +191,8 @@ public class RecipeService {
                 .orElseThrow(() -> new IllegalStateException("recipe with id " + recipeId + " does not exist"));
 
         recipe.setFavorite(isFavorite);
+        Recipe recipeSaved = recipeRepository.save(recipe);
 
-        return recipe;
+        return recipeSaved;
     }
 }
