@@ -35,8 +35,10 @@ public class RecipeController {
     }
 
     @GetMapping(path = "/{recipeId}", produces = "application/json")
-    public Recipe getRecipe(@PathVariable long userId, @PathVariable long recipeId) {
-        return recipeService.getRecipe(userId, recipeId);
+    public Recipe getRecipe(@CurrentUser UserPrincipal userPrincipal, @PathVariable("recipeId") long recipeId) {
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+        return recipeService.getRecipe(user.getId(), recipeId);
     }
 
     @PostMapping(produces = "application/json")
@@ -55,7 +57,7 @@ public class RecipeController {
     }
 
     @PutMapping(path = "/{recipeId}")
-    public void updateRecipe(@CurrentUser UserPrincipal userPrincipal, @PathVariable long recipeId, @RequestBody Recipe newRecipe) {
+    public void updateRecipe(@CurrentUser UserPrincipal userPrincipal, @PathVariable("recipeId") long recipeId, @RequestBody Recipe newRecipe) {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
         recipeService.updateRecipe(user.getId(), recipeId, newRecipe);
@@ -67,7 +69,7 @@ public class RecipeController {
     }
 
     @PostMapping(path = "/{recipeId}")
-    public void updateRecipeFavorite(@PathVariable long recipeId, @RequestParam("favorite") Boolean isFavorite) {
+    public void updateRecipeFavorite(@PathVariable("recipeId") long recipeId, @RequestParam("favorite") Boolean isFavorite) {
         recipeService.updateRecipeFavorite(recipeId, isFavorite);
     }
 
