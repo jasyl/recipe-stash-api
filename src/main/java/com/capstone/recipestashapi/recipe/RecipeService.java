@@ -142,7 +142,7 @@ public class RecipeService {
 
     public Recipe addExternalRecipe(long userId, String url) throws JsonProcessingException {
         Optional<Recipe> optionalRecipe = recipeRepository.findRecipeBySourceUrl(url);
-        
+
         if (optionalRecipe.isPresent()) {
             throw new IllegalStateException("Can't add recipe because it already exists");
         }
@@ -184,5 +184,12 @@ public class RecipeService {
         user.addRecipe(recipeSaved);
 
         return recipeSaved;
+    }
+
+    public void updateRecipeFavorite(long recipeId, boolean isFavorite) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new IllegalStateException("recipe with id " + recipeId + " does not exist"));
+
+        recipe.setFavorite(isFavorite);
     }
 }

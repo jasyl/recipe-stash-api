@@ -43,6 +43,9 @@ public class Recipe {
     @Column(name = "instructions", columnDefinition = "TEXT")
     private String instructions;
 
+    @Column(name = "favorite")
+    private boolean favorite = false;
+
     @JsonIgnore
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable=false)
@@ -87,6 +90,18 @@ public class Recipe {
         this.ingredients = ingredients;
         this.instructions = instructions;
         this.user = user;
+    }
+
+    public Recipe(int readyInMinutes, int servings, String img, String sourceUrl, String title, String instructions, boolean favorite, User user, List<Ingredient> ingredients) {
+        this.readyInMinutes = readyInMinutes;
+        this.servings = servings;
+        this.img = img;
+        this.sourceUrl = sourceUrl;
+        this.title = title;
+        this.instructions = instructions;
+        this.favorite = favorite;
+        this.user = user;
+        this.ingredients = ingredients;
     }
 
     public Long getId() {
@@ -168,6 +183,14 @@ public class Recipe {
         if (!user.getRecipes().contains(this)) {
             user.getRecipes().add(this);
         }
+    }
+
+    public boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     @Override
