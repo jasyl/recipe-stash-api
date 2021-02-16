@@ -67,7 +67,7 @@ public class RecipeController {
     }
 
     @PostMapping(path = "/{recipeId}")
-    public void updateRecipeFavorite(@PathVariable long recipeId, @RequestParam("favorite") boolean isFavorite) {
+    public void updateRecipeFavorite(@PathVariable long recipeId, @RequestParam("favorite") Boolean isFavorite) {
         recipeService.updateRecipeFavorite(recipeId, isFavorite);
     }
 
