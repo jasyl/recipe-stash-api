@@ -44,7 +44,7 @@ public class Recipe {
     private String instructions;
 
     @Column(name = "favorite")
-    private boolean favorite = false;
+    private Boolean favorite = false;
 
     @JsonIgnore
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
@@ -92,7 +92,7 @@ public class Recipe {
         this.user = user;
     }
 
-    public Recipe(int readyInMinutes, int servings, String img, String sourceUrl, String title, String instructions, boolean favorite, User user, List<Ingredient> ingredients) {
+    public Recipe(int readyInMinutes, int servings, String img, String sourceUrl, String title, String instructions, Boolean favorite, User user, List<Ingredient> ingredients) {
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
         this.img = img;
@@ -185,11 +185,11 @@ public class Recipe {
         }
     }
 
-    public boolean getFavorite() {
+    public Boolean getFavorite() {
         return favorite;
     }
 
-    public void setFavorite(boolean favorite) {
+    public void setFavorite(Boolean favorite) {
         this.favorite = favorite;
     }
 
