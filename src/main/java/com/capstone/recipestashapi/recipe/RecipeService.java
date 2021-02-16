@@ -186,10 +186,12 @@ public class RecipeService {
         return recipeSaved;
     }
 
-    public void updateRecipeFavorite(long recipeId, Boolean isFavorite) {
+    public Recipe updateRecipeFavorite(long recipeId, Boolean isFavorite) {
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalStateException("recipe with id " + recipeId + " does not exist"));
 
         recipe.setFavorite(isFavorite);
+
+        return recipe;
     }
 }
