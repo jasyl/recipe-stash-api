@@ -33,7 +33,8 @@ public class RecipeService {
 
     public List<Recipe> getRecipes(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("user with id " + userId + " does not exist"));
-        return user.getRecipes();
+        return recipeRepository.findByUserIdOrderByIdDesc(user.getId());
+//        return user.getRecipes();
     }
 
     public Recipe getRecipe(long userId, long recipeId) {
