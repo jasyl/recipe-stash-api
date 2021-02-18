@@ -143,9 +143,14 @@ public class RecipeService {
 
     public Recipe addExternalRecipe(long userId, String url) throws JsonProcessingException {
         Optional<Recipe> optionalRecipe = recipeRepository.findRecipeBySourceUrl(url);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("user with id " + userId + " does not exist"));
 
         if (optionalRecipe.isPresent()) {
-            throw new IllegalStateException("Can't add recipe because it already exists");
+            Recipe recipe = optionalRecipe.get();
+            if (user.getRecipes().contains(recipe)) {
+                throw new IllegalStateException("Can't add recipe because it already exists");
+            }
         }
 
         final String uri = "https://api.spoonacular.com/recipes/extract" + "?apiKey=" + apiKey + "&url=" + url;
@@ -154,9 +159,6 @@ public class RecipeService {
 //        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         ExternalRecipe externalRecipe = mapper.readValue(result , ExternalRecipe.class);
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("user with id " + userId + " does not exist"));
-
 
         Recipe recipe = new Recipe();
         recipe.setReadyInMinutes(externalRecipe.getReadyInMinutes());
