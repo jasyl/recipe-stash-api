@@ -68,7 +68,7 @@ public class RecipeController {
         recipeService.deleteRecipe(recipeId);
     }
 
-    @PostMapping(path = "/{recipeId}")
+    @PutMapping(path = "/{recipeId}")
     public Recipe updateRecipeFavorite(@PathVariable("recipeId") long recipeId, @RequestParam("favorite") Boolean isFavorite) {
         return recipeService.updateRecipeFavorite(recipeId, isFavorite);
     }
