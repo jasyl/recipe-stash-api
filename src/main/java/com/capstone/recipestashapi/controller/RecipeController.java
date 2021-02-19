@@ -57,6 +57,11 @@ public class RecipeController {
     }
 
     @PutMapping(path = "/{recipeId}")
+    public Recipe updateRecipeFavorite(@PathVariable("recipeId") long recipeId, @RequestParam("favorite") Boolean isFavorite) {
+        return recipeService.updateRecipeFavorite(recipeId, isFavorite);
+    }
+
+    @PutMapping(path = "/{recipeId}")
     public void updateRecipe(@CurrentUser UserPrincipal userPrincipal, @PathVariable("recipeId") long recipeId, @RequestBody Recipe newRecipe) {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
@@ -68,10 +73,7 @@ public class RecipeController {
         recipeService.deleteRecipe(recipeId);
     }
 
-    @PutMapping(path = "/{recipeId}")
-    public Recipe updateRecipeFavorite(@PathVariable("recipeId") long recipeId, @RequestParam("favorite") Boolean isFavorite) {
-        return recipeService.updateRecipeFavorite(recipeId, isFavorite);
-    }
+
 
 
 }
